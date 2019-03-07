@@ -1,0 +1,129 @@
+#!/bin/bash
+
+#Setting variables:
+#
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+source ${DIR}/HsSTRIPE.configfile 
+
+#No further edits necessary from here on ...
+#
+
+#mkdir ${fastqDIR}
+cd ${fastqDIR}
+
+#Trimming the reads with trimmomatic:
+#
+#echo "time ${SCRIPTS}/run_trimmomatic.sh"
+#time ${SCRIPTS}/run_trimmomatic.sh
+
+#Removing ribosomal RNA hits with tagdust:
+#
+
+Hs100_rep1_R1=${SAMPLE1}_rep1_trimmed_R1.fq
+Hs100_rep1_R2=${SAMPLE1}_rep1_trimmed_R2.fq
+Hs100_rep2_R1=${SAMPLE1}_rep2_trimmed_R1.fq
+Hs100_rep2_R2=${SAMPLE1}_rep2_trimmed_R2.fq
+Hs100_rep3_R1=${SAMPLE1}_rep3_trimmed_R1.fq
+Hs100_rep3_R2=${SAMPLE1}_rep3_trimmed_R2.fq
+
+Hs500_rep1_R1=${SAMPLE2}_rep1_trimmed_R1.fq
+Hs500_rep1_R2=${SAMPLE2}_rep1_trimmed_R2.fq
+Hs500_rep2_R1=${SAMPLE2}_rep2_trimmed_R1.fq
+Hs500_rep2_R2=${SAMPLE2}_rep2_trimmed_R2.fq
+Hs500_rep3_R1=${SAMPLE2}_rep3_trimmed_R1.fq
+Hs500_rep3_R2=${SAMPLE2}_rep3_trimmed_R2.fq
+
+Hs20_rep1_R1=${SAMPLE3}_rep1_trimmed_R1.fq
+Hs20_rep1_R2=${SAMPLE3}_rep1_trimmed_R2.fq
+Hs20_rep2_R1=${SAMPLE3}_rep2_trimmed_R1.fq
+Hs20_rep2_R2=${SAMPLE3}_rep2_trimmed_R2.fq
+Hs20_rep3_R1=${SAMPLE3}_rep3_trimmed_R1.fq
+Hs20_rep3_R2=${SAMPLE3}_rep3_trimmed_R2.fq
+
+OP1=${SAMPLE1}_rep1_trno_tagdusted
+OP2=${SAMPLE1}_rep2_trno_tagdusted
+OP3=${SAMPLE1}_rep3_trno_tagdusted
+
+OP4=${SAMPLE2}_rep1_trno_tagdusted
+OP5=${SAMPLE2}_rep2_trno_tagdusted
+OP6=${SAMPLE2}_rep3_trno_tagdusted
+
+OP7=${SAMPLE3}_rep1_trno_tagdusted
+OP8=${SAMPLE3}_rep2_trno_tagdusted
+OP9=${SAMPLE3}_rep3_trno_tagdusted
+
+#${TAGDUST} -ref ${RNAfile} -dust 97 -t ${THREADS} -fe 3 -1 R:N ${Hs100_rep1_R1} ${Hs100_rep1_R2} -o ${OP1}
+#${TAGDUST} -ref ${RNAfile} -dust 97 -t ${THREADS} -fe 3 -1 R:N ${Hs100_rep2_R1} ${Hs100_rep2_R2} -o ${OP2}
+#${TAGDUST} -ref ${RNAfile} -dust 97 -t ${THREADS} -fe 3 -1 R:N ${Hs100_rep3_R1} ${Hs100_rep3_R2} -o ${OP3}
+
+#${TAGDUST} -ref ${RNAfile} -dust 97 -t ${THREADS} -fe 3 -1 R:N ${Hs500_rep1_R1} ${Hs500_rep1_R2} -o ${OP4}
+#${TAGDUST} -ref ${RNAfile} -dust 97 -t ${THREADS} -fe 3 -1 R:N ${Hs500_rep2_R1} ${Hs500_rep2_R2} -o ${OP5}
+#${TAGDUST} -ref ${RNAfile} -dust 97 -t ${THREADS} -fe 3 -1 R:N ${Hs500_rep3_R1} ${Hs500_rep3_R2} -o ${OP6}
+
+#${TAGDUST} -ref ${RNAfile} -dust 97 -t ${THREADS} -fe 3 -1 R:N ${Hs20_rep1_R1} ${Hs20_rep1_R2} -o ${OP7}
+#${TAGDUST} -ref ${RNAfile} -dust 97 -t ${THREADS} -fe 3 -1 R:N ${Hs20_rep2_R1} ${Hs20_rep2_R2} -o ${OP8}
+#${TAGDUST} -ref ${RNAfile} -dust 97 -t ${THREADS} -fe 3 -1 R:N ${Hs20_rep3_R1} ${Hs20_rep3_R2} -o ${OP9}
+
+cd ..
+
+#Mapping the reads with the BWA aligner:
+#
+echo "time ${SCRIPTS}/run_BWA_alignment.sh"
+time ${SCRIPTS}/run_BWA_alignment.sh
+
+#Scrubbing and removal of PCR duplicates:
+#
+BWAdir=${BASEDIR}/${EXPERIMENT}/BWAdir
+
+cd ${BWAdir}
+
+for BAM in *rep?_filtered.bam; do
+
+    echo "${SAMTOOLS} sort -n ${BAM} | ${SAMTOOLS} view -h > $(basename $BAM _filtered.bam)_filtered_sorted.sam"
+    ${SAMTOOLS} sort -n ${BAM} | ${SAMTOOLS} view -h > $(basename $BAM _filtered.bam)_filtered_sorted.sam                        
+
+# ... scrubbing: we remove singlets left over by the samtools -f 2 -q 10 filter that
+#      left one read of a read pair intact; we also remove read pairs in
+#      which one read was mapped with more than a 4kb gap (presumed intron)
+#      and reads with TLEN greater than 5000; potential introns >= 50 nt
+#      detecting read pairs are saved for further analysis (but not removed
+#      from the final set for TSRchitect analysis - Scrubbed-${BAM}.bam)
+#
+
+${SCRIPTS}/scrubSAMfile.pl -p -i 50 -I 4000 -t 5000 -o $(basename $BAM _filtered.bam).sam -s $(basename $BAM _filtered.bam)_filtered_sorted.sam >& scrub.log              
+
+done
+
+#Newly added
+#----------------------------------------------------------------------------------------------------------------------------------------
+${SAMTOOLS} view -H ${SAMPLE1}_rep1_filtered_sorted.sam | ${SAMTOOLS} view -h | ${SAMTOOLS} sort -@ 8 -o Clean-${SAMPLE1}_rep1.bam
+${SAMTOOLS} view -H ${SAMPLE1}_rep2_filtered_sorted.sam | ${SAMTOOLS} view -h | ${SAMTOOLS} sort -@ 8 -o Clean-${SAMPLE1}_rep2.bam
+${SAMTOOLS} view -H ${SAMPLE1}_rep3_filtered_sorted.sam | ${SAMTOOLS} view -h | ${SAMTOOLS} sort -@ 8 -o Clean-${SAMPLE1}_rep3.bam
+
+${SAMTOOLS} view -H ${SAMPLE2}_rep1_filtered_sorted.sam | ${SAMTOOLS} view -h | ${SAMTOOLS} sort -@ 8 -o Clean-${SAMPLE2}_rep1.bam
+${SAMTOOLS} view -H ${SAMPLE2}_rep2_filtered_sorted.sam | ${SAMTOOLS} view -h | ${SAMTOOLS} sort -@ 8 -o Clean-${SAMPLE2}_rep2.bam
+${SAMTOOLS} view -H ${SAMPLE2}_rep3_filtered_sorted.sam | ${SAMTOOLS} view -h | ${SAMTOOLS} sort -@ 8 -o Clean-${SAMPLE2}_rep3.bam
+
+${SAMTOOLS} view -H ${SAMPLE3}_rep1_filtered_sorted.sam | ${SAMTOOLS} view -h | ${SAMTOOLS} sort -@ 8 -o Clean-${SAMPLE3}_rep1.bam
+${SAMTOOLS} view -H ${SAMPLE3}_rep2_filtered_sorted.sam | ${SAMTOOLS} view -h | ${SAMTOOLS} sort -@ 8 -o Clean-${SAMPLE3}_rep2.bam
+${SAMTOOLS} view -H ${SAMPLE3}_rep3_filtered_sorted.sam | ${SAMTOOLS} view -h | ${SAMTOOLS} sort -@ 8 -o Clean-${SAMPLE3}_rep3.bam
+#----------------------------------------------------------------------------------------------------------------------------------------
+
+cd ..
+
+#Counting TSS tags and determining TSRs with TSRchitect:
+#
+cd tsr
+ mkdir BAMDIR
+ cd BAMDIR
+
+ for BAM in ../../BWAdir/Clean-*; do                                       #changed to just Clean-* instead of Clean*-bam ... 
+     ln -s ${BAM} ./                                                       # was previosly ln -s ../../${BAM} ./  ### This created broken links
+  done
+     ln -s ${BASEDIR}/${GENOME_DIR}/${GENOME_GFF} HsGenome.gff3
+     cd ..
+echo "... now running Rscript ${EXPERIMENT}wf*.Rscript"
+ time ./xrunSwf all
+
+
+

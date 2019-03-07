@@ -1,0 +1,5 @@
+#### to run this example, please type the following from a linux command line
+#### this assumes that you have set up the config file and installed the appropriate software
+#### edit the batch file (launch_job.sh) as appropriate
+
+qsub launch_job.sh
