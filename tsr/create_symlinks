@@ -1,0 +1,14 @@
+
+bamDir=/N/dc2/projects/ParameciumPromoters/STRIPE_data/HsSTRIPE/aligned_human_bams
+
+ln -s ${bamDir}/cleaned_marked_SS16_Aligned.sortedByCoord.out.bamProcessed.out.bam BAMDIR/K562_100_r1.bam
+ln -s ${bamDir}/cleaned_marked_SS17_Aligned.sortedByCoord.out.bamProcessed.out.bam BAMDIR/K562_100_r2.bam
+ln -s ${bamDir}/cleaned_marked_SS18_Aligned.sortedByCoord.out.bamProcessed.out.bam BAMDIR/K562_100_r3.bam
+
+ln -s ${bamDir}/cleaned_marked_SS19_Aligned.sortedByCoord.out.bamProcessed.out.bam BAMDIR/K562_500_r1.bam
+ln -s ${bamDir}/cleaned_marked_SS20_Aligned.sortedByCoord.out.bamProcessed.out.bam BAMDIR/K562_500_r2.bam
+ln -s ${bamDir}/cleaned_marked_SS21_Aligned.sortedByCoord.out.bamProcessed.out.bam BAMDIR/K562_500_r3.bam
+
+ln -s ${bamDir}/cleaned_marked_SS22_Aligned.sortedByCoord.out.bamProcessed.out.bam BAMDIR/K562_20_r1.bam
+ln -s ${bamDir}/cleaned_marked_SS23_Aligned.sortedByCoord.out.bamProcessed.out.bam BAMDIR/K562_20_r2.bam
+ln -s ${bamDir}/cleaned_marked_SS24_Aligned.sortedByCoord.out.bamProcessed.out.bam BAMDIR/K562_20_r3.bam

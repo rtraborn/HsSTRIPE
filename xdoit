@@ -52,17 +52,17 @@ OP7=${SAMPLE3}_rep1_trno_tagdusted
 OP8=${SAMPLE3}_rep2_trno_tagdusted
 OP9=${SAMPLE3}_rep3_trno_tagdusted
 
-#${TAGDUST} -ref ${RNAfile} -dust 97 -t ${THREADS} -fe 3 -1 R:N ${Hs100_rep1_R1} ${Hs100_rep1_R2} -o ${OP1}
-#${TAGDUST} -ref ${RNAfile} -dust 97 -t ${THREADS} -fe 3 -1 R:N ${Hs100_rep2_R1} ${Hs100_rep2_R2} -o ${OP2}
-#${TAGDUST} -ref ${RNAfile} -dust 97 -t ${THREADS} -fe 3 -1 R:N ${Hs100_rep3_R1} ${Hs100_rep3_R2} -o ${OP3}
+${TAGDUST} -ref ${RNAfile} -dust 97 -t ${THREADS} -fe 3 -1 R:N ${Hs100_rep1_R1} ${Hs100_rep1_R2} -o ${OP1}
+${TAGDUST} -ref ${RNAfile} -dust 97 -t ${THREADS} -fe 3 -1 R:N ${Hs100_rep2_R1} ${Hs100_rep2_R2} -o ${OP2}
+${TAGDUST} -ref ${RNAfile} -dust 97 -t ${THREADS} -fe 3 -1 R:N ${Hs100_rep3_R1} ${Hs100_rep3_R2} -o ${OP3}
 
-#${TAGDUST} -ref ${RNAfile} -dust 97 -t ${THREADS} -fe 3 -1 R:N ${Hs500_rep1_R1} ${Hs500_rep1_R2} -o ${OP4}
-#${TAGDUST} -ref ${RNAfile} -dust 97 -t ${THREADS} -fe 3 -1 R:N ${Hs500_rep2_R1} ${Hs500_rep2_R2} -o ${OP5}
-#${TAGDUST} -ref ${RNAfile} -dust 97 -t ${THREADS} -fe 3 -1 R:N ${Hs500_rep3_R1} ${Hs500_rep3_R2} -o ${OP6}
+${TAGDUST} -ref ${RNAfile} -dust 97 -t ${THREADS} -fe 3 -1 R:N ${Hs500_rep1_R1} ${Hs500_rep1_R2} -o ${OP4}
+${TAGDUST} -ref ${RNAfile} -dust 97 -t ${THREADS} -fe 3 -1 R:N ${Hs500_rep2_R1} ${Hs500_rep2_R2} -o ${OP5}
+${TAGDUST} -ref ${RNAfile} -dust 97 -t ${THREADS} -fe 3 -1 R:N ${Hs500_rep3_R1} ${Hs500_rep3_R2} -o ${OP6}
 
-#${TAGDUST} -ref ${RNAfile} -dust 97 -t ${THREADS} -fe 3 -1 R:N ${Hs20_rep1_R1} ${Hs20_rep1_R2} -o ${OP7}
-#${TAGDUST} -ref ${RNAfile} -dust 97 -t ${THREADS} -fe 3 -1 R:N ${Hs20_rep2_R1} ${Hs20_rep2_R2} -o ${OP8}
-#${TAGDUST} -ref ${RNAfile} -dust 97 -t ${THREADS} -fe 3 -1 R:N ${Hs20_rep3_R1} ${Hs20_rep3_R2} -o ${OP9}
+${TAGDUST} -ref ${RNAfile} -dust 97 -t ${THREADS} -fe 3 -1 R:N ${Hs20_rep1_R1} ${Hs20_rep1_R2} -o ${OP7}
+${TAGDUST} -ref ${RNAfile} -dust 97 -t ${THREADS} -fe 3 -1 R:N ${Hs20_rep2_R1} ${Hs20_rep2_R2} -o ${OP8}
+${TAGDUST} -ref ${RNAfile} -dust 97 -t ${THREADS} -fe 3 -1 R:N ${Hs20_rep3_R1} ${Hs20_rep3_R2} -o ${OP9}
 
 cd ..
 
