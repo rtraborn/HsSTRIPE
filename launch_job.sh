@@ -1,9 +1,10 @@
 #!/bin/bash
 
-#PBS -N HsSTRIPE_job_1228
+#PBS -N HsSTRIPE_job_0307
 #PBS -k o
 #PBS -l nodes=1:ppn=16,vmem=48gb
-#PBS -l walltime=18:00:00
+#PBS -l walltime=1:00:00
+#PBS -q debug
 
 module load java
 
