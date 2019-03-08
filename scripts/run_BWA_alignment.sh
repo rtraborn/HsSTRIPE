@@ -19,7 +19,7 @@ echo "bwa index ${GENOME_DIR}/${GENOME_FILE}"
 #${BWA}    index ${GENOME_DIR}/${GENOME_FILE}
 
 echo "Starting alignments ..."
-for fq in ${fastqDIR}/*_trno_tagdusted_READ?.fq;
+for fq in ${fastqDIR}/*_trno_tagdusted_READ1.fq;
 do
 
  	echo "bwa mem -t ${THREADS} ${GENOME_DIR}/${GENOME_FILE} ${fq} ${fastqDIR}/$(basename $fq _READ1.fq)_READ2.fq | ${SAMTOOLS} view -uS - | ${SAMTOOLS} sort -O BAM - > $(basename $fq _trno_tagdusted_READ1.fq)_sorted.bam"
