@@ -26,9 +26,6 @@ do
 
  	${BWA} mem -t ${THREADS} ${GENOME_DIR}/${GENOME_FILE} ${fq} ${fastqDIR}/$(basename $fq _READ1.fq)_READ2.fq | ${SAMTOOLS} view -uS - | ${SAMTOOLS} sort -O BAM - > $(basename $fq _trno_tagdusted_READ1.fq)_sorted.bam
 
-
-done
-
 echo "samtools index -b $(basename $fq _trno_tagdusted_READ1.fq)_sorted.bam "
 ${SAMTOOLS} index -b $(basename $fq _trno_tagdusted_READ1.fq)_sorted.bam
 
