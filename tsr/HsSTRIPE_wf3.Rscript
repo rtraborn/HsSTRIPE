@@ -20,6 +20,9 @@ cat (HsSTRIPE@title,"\tWorkflow 3\n")
  TSSthreshold <- 3
  useClustDist <- 25
 
+# ... merge samples
+Hs_RAMPAGE <- mergeSampleData(experimentName=HsSTRIPE)
+
 # ... finding TSRs:
 HsSTRIPE <- determineTSR(experimentName=HsSTRIPE, n.cores=1, tsrSetType="replicates", tssSet="all", tagCountThreshold=TSSthreshold, clustDist=useClustDist, writeTable=TRUE)
 
