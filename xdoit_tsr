@@ -1,0 +1,23 @@
+#!/bin/bash
+
+#Setting variables:
+#
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+source ${DIR}/HsSTRIPE.configfile 
+
+#No further edits necessary from here on ...
+#
+
+#Performing TSS analysis with TSRchitect
+
+cd tsr
+
+ cd BAMDIR
+
+     ln -s ${BASEDIR}/${GENOME_DIR}/${GENOME_GFF} HsGenome.gff3
+     cd ..
+echo "... now running Rscript ${EXPERIMENT}wf*.Rscript"
+ time ./xrunSwf all
+
+
+
